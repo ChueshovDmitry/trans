@@ -7,8 +7,8 @@ import com.test.transaction.dao.Human;
 import com.test.transaction.dao.HumanRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 
 @AllArgsConstructor
 @Service
@@ -18,7 +18,7 @@ public class HumanService implements AbstractHumanService {
 
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = CustomEx.class)
     public void saveHuman (){
         BankAccount bankAccount = new BankAccount();
         bankAccount.setSum(0L);
@@ -27,12 +27,9 @@ public class HumanService implements AbstractHumanService {
         } catch (CustomEx e) {
             System.out.println(e);
         }
-
         Human human = new Human();
         human.setSurname("Dmitry");
         humanRepository.save(human);
-
-
 
     }
 }
